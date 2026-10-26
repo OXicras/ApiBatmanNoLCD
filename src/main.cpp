@@ -3,41 +3,39 @@
 #include <HTTPClient.h>
 #include <string.h>
 #include <esp_sntp.h>
+#include <LiquidCrystal_I2C.h>
 
-String pedirParaApi(String);
+LiquidCrystal_I2C lcd (0x27, 20, 4);
+String pedirParaApi();
 
 const char* nomeRedeWiFi = "SENAI EDUCACIONAL";
 const char* senhaRedeWiFi = "info@134";
 const String enderecoAPI = "https://api.batmanapi.com/v1/characters/1";
 
-//TODO =========== Servidores ===========
-const char* NTP1 = "a.st1.ntp.br";
-const char* NTP2 = "pool.ntp.org";
-
 void setup() 
 {
   Serial.begin(115200);
   WiFi.begin(nomeRedeWiFi, senhaRedeWiFi);
+  lcd.init();
+  lcd.backlight();
 
   Serial.println();
   while(WiFi.status() != WL_CONNECTED)
   {
     Serial.print("#");
+    delay(500);
   }
   Serial.println();
+  String batmanApi = pedirParaApi();
+  Serial.println(batmanApi);
 }
 
-void loop() 
-{
-  unsigned long now = millis();
-  static unsigned long tempoInicial = 0;
-  const long umMinuto = 60000;
-}
+void loop() {}
 
-String pedirParaApi(String codigo)
+String pedirParaApi()
 {
   HTTPClient http;
-  http.begin(enderecoAPI + codigo);
+  http.begin(enderecoAPI);
   
   int codigoHTTP = http.GET();
   String resposta;
