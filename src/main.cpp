@@ -73,6 +73,10 @@ void loop()
     }
   }
   estadoAnterior = estadoBotao;
+  if (contador >= 83)
+  {
+    contador = 1;
+  }
 }
 
 String pedirParaApi(int codigo)
